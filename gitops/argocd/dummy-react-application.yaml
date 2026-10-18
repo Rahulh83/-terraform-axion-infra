@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dummy-react
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/OWNER/REPOSITORY.git
+    targetRevision: main
+    path: terraform-todoapp-infra/gitops/helm/dummy-react
+    helm:
+      releaseName: dummy-react
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dummy-react
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
